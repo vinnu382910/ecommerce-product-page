@@ -13,14 +13,14 @@ export async function getProducts(): Promise<Product[]> {
     })
 
     if (!response.ok) {
-      console.log("[v0] API returned status:", response.status, "- Using fallback data")
+      console.log("API returned status:", response.status, "- Using fallback data")
       return mockProducts
     }
 
     const products: Product[] = await response.json()
     return products
   } catch (error) {
-    console.log("[v0] API fetch failed - Using fallback data")
+    console.log("API fetch failed - Using fallback data")
     return mockProducts
   }
 }

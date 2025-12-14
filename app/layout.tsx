@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { CartProvider } from "@/lib/context/cart-context"
 import { Toaster } from "@/components/ui/toaster"
+import { Header } from "@/components/header"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -13,7 +14,6 @@ export const metadata: Metadata = {
   title: "Lumina Store - Premium Modern Lifestyle Products",
   description:
     "Discover our collection of premium goods designed for the modern lifestyle. Shop bags, accessories, footwear and more.",
-  generator: "v0.app",
   keywords: "lumina store, premium products, modern lifestyle, e-commerce, online shopping",
   authors: [{ name: "Lumina Store" }],
   openGraph: {
@@ -39,6 +39,7 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-icon.png",
   },
+    generator: 'v0.app'
 }
 
 export const viewport = {
@@ -58,6 +59,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans antialiased`}>
         <CartProvider>
+          <Header />
           {children}
           <Toaster />
         </CartProvider>

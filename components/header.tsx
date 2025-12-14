@@ -7,15 +7,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useCart } from "@/lib/context/cart-context"
 
-interface HeaderProps {
-  searchQuery?: string
-  onSearchChange?: (query: string) => void
-}
-
-export function Header({ searchQuery = "", onSearchChange }: HeaderProps) {
+export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
   const { totalItems } = useCart()
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query)
+    window.dispatchEvent(new CustomEvent("search-products", { detail: query }))
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
@@ -47,7 +48,7 @@ export function Header({ searchQuery = "", onSearchChange }: HeaderProps) {
                 type="text"
                 placeholder="Search products..."
                 value={searchQuery}
-                onChange={(e) => onSearchChange?.(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="h-9 w-64 pl-9 pr-4"
               />
             </div>
@@ -84,7 +85,7 @@ export function Header({ searchQuery = "", onSearchChange }: HeaderProps) {
               type="text"
               placeholder="Search products..."
               value={searchQuery}
-              onChange={(e) => onSearchChange?.(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full pl-9 pr-4"
               autoFocus
             />

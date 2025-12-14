@@ -1,31 +1,37 @@
-import { Suspense } from "react"
+"use client"
+
+import { useEffect, useState } from "react"
 import { Hero } from "@/components/hero"
 import { ProductGrid } from "@/components/product-grid"
 import { Footer } from "@/components/footer"
 import { getProducts } from "@/lib/services/product-service"
+import type { Product } from "@/lib/types"
 
-export const metadata = {
-  title: "Lumina Store - Discover Our Products | Premium Modern Lifestyle Goods",
-  description:
-    "Browse our latest collection of premium goods designed for the modern lifestyle. Shop bags, accessories, footwear and more at Lumina Store.",
-  keywords: "lumina store, premium goods, modern lifestyle, bags, accessories, footwear, online shopping",
-  openGraph: {
-    title: "Lumina Store - Discover Our Products",
-    description: "Browse our latest collection of premium goods designed for the modern lifestyle.",
-    type: "website",
-  },
-}
+export default function Home() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
 
-export default async function Home() {
-  const products = await getProducts()
+  useEffect(() => {
+    getProducts().then(setProducts)
+  }, [])
+
+  useEffect(() => {
+    const handleSearch = (e: CustomEvent) => {
+      setSearchQuery(e.detail)
+    }
+    window.addEventListener("search-products" as any, handleSearch)
+    return () => window.removeEventListener("search-products" as any, handleSearch)
+  }, [])
 
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
         <Hero />
-        <Suspense fallback={<div className="container py-8">Loading products...</div>}>
-          <ProductGrid initialProducts={products} />
-        </Suspense>
+        {products.length > 0 ? (
+          <ProductGrid initialProducts={products} searchQuery={searchQuery} />
+        ) : (
+          <div className="container py-8">Loading products...</div>
+        )}
       </main>
       <Footer />
     </div>
